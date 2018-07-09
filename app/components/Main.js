@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 
 import Calendar from './children/Calendar';
-import Appointments from './children/Appointments';
 
-import './styles/App.css';
-
-class Main extends Component {
+export default class Main extends Component {
   render() {
     return (
       <div className="App">
@@ -19,10 +16,7 @@ class Main extends Component {
         <main>
           <Calendar />
         </main>
-          <Appointments />
       </div>
     );
   }
 }
-
-export default Main;

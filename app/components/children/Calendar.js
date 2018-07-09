@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import dateFns from 'date-fns';
 
+import Appointments from './Appointments.js';
+
 class Calendar extends Component {
   state = {
-    currentMonth: new Date(),
-    selectedDate: new Date()
-  };
+      currentMonth: new Date(),
+      selectedDate: new Date()
+    };
 
   renderHeader() {
     const dateFormat = 'MMMM YYYY';
@@ -89,6 +91,8 @@ class Calendar extends Component {
   }
 
   onDateClick = day => {
+    console.log('hey we are trying to set the Day');
+    console.log(day);
     this.setState({
       selectedDate: day
     });
@@ -108,10 +112,13 @@ class Calendar extends Component {
 
   render() {
     return (
-      <div className='calendar'>
-        {this.renderHeader()}
-        {this.renderDays()}
-        {this.renderCells()}
+      <div>
+        <div className='calendar'>
+          {this.renderHeader()}
+          {this.renderDays()}
+          {this.renderCells()}
+        </div>
+        <Appointments calendarDate={this.state.selectedDate} />
       </div>
     );
   }
