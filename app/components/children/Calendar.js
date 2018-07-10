@@ -4,10 +4,19 @@ import dateFns from 'date-fns';
 import Appointments from './Appointments.js';
 
 class Calendar extends Component {
-  state = {
+  constructor(props){
+    super(props);
+    this.state = {
       currentMonth: new Date(),
       selectedDate: new Date()
     };
+
+    this.onDateClick = this.onDateClick.bind(this);
+  }
+  // state = {
+  //     currentMonth: new Date(),
+  //     selectedDate: new Date()
+  //   };
 
   renderHeader() {
     const dateFormat = 'MMMM YYYY';
@@ -90,13 +99,11 @@ class Calendar extends Component {
     return <div className='body'>{rows}</div>;
   }
 
-  onDateClick = day => {
-    console.log('hey we are trying to set the Day');
-    console.log(day);
+  onDateClick(day){
     this.setState({
       selectedDate: day
     });
-  };
+  }
 
   nextMonth = () => {
     this.setState({
