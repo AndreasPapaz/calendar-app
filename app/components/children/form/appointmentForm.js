@@ -5,15 +5,17 @@ import axios from 'axios';
 
 const AppointmentForm = ({
 	onSubmit,
-	data,
+  onChange,
+	entry,
 }) => (
   <Form className='' action='/' onSubmit={onSubmit}>
 		<Form.Field>
 			<label>Title</label>
 			<input
-			name='title'
-			value={'test'}
-			placeholder='what did you do today!' />
+			name='body'
+      onChange={ onChange }
+			value={ entry.body }
+			placeholder='Todays Task' />
 		</Form.Field>
 
 		 <Button type='submit' primary>Post</Button>
@@ -23,7 +25,7 @@ const AppointmentForm = ({
 
 // AppointmentForm.propTypes = {
 // 	onSubmit: PropTypes.func.isRequired,
-// 	entry: PropTypes.object.isRequired
+// 	formatDate: PropTypes.object.isRequired
 // };
 
 export default AppointmentForm;
