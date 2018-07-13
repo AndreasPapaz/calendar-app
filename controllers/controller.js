@@ -1,17 +1,4 @@
-module.exports = function(app) {
-    // app.post('/delete', function(req, res) {
-    //     Journal.remove({_id: req.body.id}, function(err, doc) {
-    //         if(err) {
-    //             console.log(err);
-    //         } else {
-    //             console.log("This is the new doc from delete");
-    //             console.log("==========================");
-    //             // console.log(doc);
-    //             res.send(doc);
-    //         }
-    //     });
-    // });
-
+module.exports = function(app, Appointment) {
     app.post('/signup', function(req, res) {
         var user = new User(req.body);
 
@@ -24,19 +11,31 @@ module.exports = function(app) {
         });
     });
 
-    app.post('/test', (req, res) => {
-      console.log('===========================');
-      console.log('===========================');
-      console.log(req.body);
-      console.log('===========================');
-      console.log('===========================');
-      //some orm to handle MONGODB
+    app.post('/appointment', (req, res) => {
+      let appointment = new Appointment(req.body);
+
+      appointment.save(function(err, doc) {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(doc);
+        }
+      });
     });
 
+    app.post('/get_appointment', (req, res) => {
+      Appointment.findOne({
+        Date: new Date(req.body.day)
+      }, function(err, App){
+        if (err) {
+          console.log(err);
+        } else {
+          res.json(App);
+        }
+      });
+    })
+
     app.use('*', function(req, res) {
-        console.log('=============');
-        console.log('hitting the ALL path');
-        console.log('=============');
         var dir = __dirname;
         var dirSplit = dir.split("controllers");
         dir = dirSplit[0];

@@ -20,7 +20,7 @@ mongoose.Promise = Promise;
 
 mongoose.connect("mongodb://localhost/calendar-app");
 // mongoose.connect('mongodb://heroku_029r9jnm:qeqr4el8h0o2ge6m6v3hd35iou@ds127063.mlab.com:27063/heroku_029r9jnm');
-var db = mongoose.connection;
+const db = mongoose.connection;
 
 db.on('error', function(error) {
 	console.log("Mongoose error : " + error);
@@ -29,6 +29,9 @@ db.on('error', function(error) {
 db.once('open', function() {
 	console.log('Mongoose Connection Successful!');
 });
+
+// Mongo Schemas
+const Appointment = require('./model/Appointments');
 
 // //Look for static files
 // app.use('/static', express.static('./server/static'));
@@ -45,7 +48,7 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(partials());
 
 //Routes
-require('./controllers/controller.js')(app);
+require('./controllers/controller.js')(app, Appointment);
 
 
 // //start server

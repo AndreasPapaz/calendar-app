@@ -4,6 +4,7 @@ import axios from 'axios';
 import dateFns from 'date-fns';
 
 import AppointmentForm from './form/appointmentForm'
+import AppointmentBody from './form/appointmentBody';
 
 class Appointments extends Component {
   constructor(props) {
@@ -15,7 +16,8 @@ class Appointments extends Component {
         entry: {
           date: '',
           body: ''
-        }
+        },
+        appointmentDay: null
       };
       this.submitAppointment = this.submitAppointment.bind(this);
 		  this.changeEntry = this.changeEntry.bind(this);
@@ -23,23 +25,49 @@ class Appointments extends Component {
 
   componentWillMount(){
     let pickedDate = new Date(String(this.props.calendarDate));
+    let formatDate = pickedDate.toLocaleDateString();
     let repDate = String(pickedDate).split(pickedDate.getFullYear())[0];
 
     this.setState({
+      formatDate: formatDate,
       representDate: repDate
     });
+
+    let getData = {
+      day: formatDate
+    };
+
+    axios.post('/get_appointment', getData).then(res => {
+      this.setState({
+        appointmentDay: res.body
+      });
+    });
+
   }
 
   componentWillReceiveProps(nextProps) {
-    // let pickedDate = new Date(String(this.state.selectedDate));
     let pickedDate = new Date(String(nextProps.calendarDate));
-    let formatDate = pickedDate.toISOString().split('T')[0];
+    let formatDate = pickedDate.toLocaleDateString();
     let repDate = String(pickedDate).split(pickedDate.getFullYear())[0];
 
     this.setState({
       selectedDate: nextProps.calendarDate,
       representDate: repDate,
       formatDate: formatDate
+    });
+
+    let getData = {
+      day: formatDate
+    };
+
+    axios.post('/get_appointment', getData).then(res => {
+      let data = null;
+      if (res.data !== null){
+        data = res.body
+      }
+      this.setState({
+        appointmentDay: data
+      });
     });
   }
 
@@ -56,29 +84,35 @@ class Appointments extends Component {
   submitAppointment(e) {
     e.preventDefault();
     let mongoData = {
-      date: this.state.formatDate,
+      Date: this.state.formatDate,
       body: this.state.entry.body
     };
 
-    axios.post('/test', mongoData);
+    axios.post('/appointment', mongoData);
+  }
+
+  makeOrDelete() {
+    if (this.state.appointmentDay !== null) {
+      return <h3>Not Null</h3>
+    } else {
+      return(
+        <AppointmentForm
+          onSubmit={this.submitAppointment}
+          onChange={this.changeEntry}
+          entry={this.state.entry}
+        />
+      )
+    }
   }
 
   render(){
     return(
       <div>
         <h1>{ this.state.representDate }</h1>
-          <AppointmentForm
-    				onSubmit={this.submitAppointment}
-            onChange={this.changeEntry}
-    				entry={this.state.entry}
-  				/>
+        { this.makeOrDelete() }
       </div>
     );
   }
 }
-
-// Appointments.PropTypes = {
-//     children: PropTypes.object.isRequired
-// };
 
 export default Appointments;
