@@ -13,10 +13,6 @@ class Calendar extends Component {
 
     this.onDateClick = this.onDateClick.bind(this);
   }
-  // state = {
-  //     currentMonth: new Date(),
-  //     selectedDate: new Date()
-  //   };
 
   renderHeader() {
     const dateFormat = 'MMMM YYYY';

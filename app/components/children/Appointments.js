@@ -4,22 +4,23 @@ import axios from 'axios';
 import dateFns from 'date-fns';
 
 import AppointmentForm from './form/appointmentForm'
-import AppointmentBody from './form/appointmentBody';
+import { Card, Button } from 'semantic-ui-react'
 
 class Appointments extends Component {
   constructor(props) {
       super(props);
       this.state = {
+        todayDate: new Date(),
         selectedDate: props.calendarDate,
         formatDate: null,
         representDate: null,
         entry: {
-          date: '',
           body: ''
         },
         appointmentDay: null
       };
       this.submitAppointment = this.submitAppointment.bind(this);
+      this.deleteAppointment = this.deleteAppointment.bind(this);
 		  this.changeEntry = this.changeEntry.bind(this);
   }
 
@@ -39,7 +40,7 @@ class Appointments extends Component {
 
     axios.post('/get_appointment', getData).then(res => {
       this.setState({
-        appointmentDay: res.body
+        appointmentDay: res.data.body
       });
     });
 
@@ -63,7 +64,7 @@ class Appointments extends Component {
     axios.post('/get_appointment', getData).then(res => {
       let data = null;
       if (res.data !== null){
-        data = res.body
+        data = res.data.body
       }
       this.setState({
         appointmentDay: data
@@ -75,7 +76,6 @@ class Appointments extends Component {
     const entry = this.state.entry;
 		const field = event.target.name;
 		entry[field] = event.target.value;
-		console.log(field);
 		this.setState({
 			entry
 		});
@@ -88,18 +88,49 @@ class Appointments extends Component {
       body: this.state.entry.body
     };
 
-    axios.post('/appointment', mongoData);
+    axios.post('/appointment', mongoData).then(res => {
+      this.setState({
+        appointmentDay: res.data.body
+      });
+    });
+  }
+
+  deleteAppointment(e){
+    e.preventDefault();
+
+    let mongoData = {
+      Date: this.state.formatDate
+    };
+
+    axios.post('/delete', mongoData).then(res => {
+      this.setState({
+        appointmentDay: null
+      });
+    });
   }
 
   makeOrDelete() {
+    let todayDate = new Date(this.state.todayDate);
+    let selectedDate = new Date(this.state.selectedDate);
+
     if (this.state.appointmentDay !== null) {
-      return <h3>Not Null</h3>
-    } else {
+      return(
+        <Card>
+          <Card.Content>
+            <Card.Header>Appointment for... { this.state.representDate }</Card.Header>
+            <Card.Description>{ this.state.appointmentDay }</Card.Description>
+          </Card.Content>
+          <Button negative onClick={ this.deleteAppointment }>Delete</Button>
+        </Card>
+      )
+    }
+    else if (todayDate.toLocaleDateString() <= selectedDate.toLocaleDateString()){
       return(
         <AppointmentForm
           onSubmit={this.submitAppointment}
           onChange={this.changeEntry}
           entry={this.state.entry}
+          selectedDate={this.state.representDate}
         />
       )
     }
@@ -107,8 +138,7 @@ class Appointments extends Component {
 
   render(){
     return(
-      <div>
-        <h1>{ this.state.representDate }</h1>
+      <div class='container'>
         { this.makeOrDelete() }
       </div>
     );

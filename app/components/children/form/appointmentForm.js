@@ -7,10 +7,11 @@ const AppointmentForm = ({
 	onSubmit,
   onChange,
 	entry,
+  selectedDate,
 }) => (
   <Form className='' action='/' onSubmit={onSubmit}>
 		<Form.Field>
-			<label>Title</label>
+			<label>Create appointment for { selectedDate }</label>
 			<input
 			name='body'
       onChange={ onChange }
@@ -22,10 +23,5 @@ const AppointmentForm = ({
 
 	</Form>
 );
-
-// AppointmentForm.propTypes = {
-// 	onSubmit: PropTypes.func.isRequired,
-// 	formatDate: PropTypes.object.isRequired
-// };
 
 export default AppointmentForm;

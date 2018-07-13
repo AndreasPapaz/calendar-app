@@ -33,7 +33,19 @@ module.exports = function(app, Appointment) {
           res.json(App);
         }
       });
-    })
+    });
+
+    app.post('/delete', (req, res) => {
+      Appointment.remove({
+        Date: new Date(req.body.Date)
+      }, function(err, App){
+        if (err){
+          console.log(err);
+        } else {
+          res.send(App)
+        }
+      });
+    });
 
     app.use('*', function(req, res) {
         var dir = __dirname;
