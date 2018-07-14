@@ -10,13 +10,13 @@ Only one appointment per day is allowed. This is a shared Web App and has not ye
 ---
 ## Screenshots
 Full Web Page
-![Full Web Page](https://imgur.com/3mWAcbT)
+![Full Web Page](https://i.imgur.com/3mWAcbT.png)
 
 Create A New Appointment (RED dots are existing appointments)
-![Create A New Appointment (RED dots are existing appointments)](https://imgur.com/psnuSfZ)
+![Create A New Appointment (RED dots are existing appointments)](https://i.imgur.com/psnuSfZ.png)
 
 Appointment Created, New Options are available
-![Appointment Created, New Options are available](https://imgur.com/WaGV3aV)
+![Appointment Created, New Options are available](https://i.imgur.com/WaGV3aV.png)
 
 ## Technologies used
 
