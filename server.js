@@ -55,6 +55,8 @@ require('./controllers/controller.js')(app, Appointment);
 
 
 // //start server
-app.listen(PORT, function() {
-	console.log('Listening on port : ' + PORT);
-});
+// app.listen(PORT, function() {
+// 	console.log('Listening on port : ' + PORT);
+// });
+
+app.listen(process.env.PORT || PORT);
