@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
 const morgan = require('morgan');
+const favicon = require('serve-favicon');
 let partials = require('express-partials');
 // const passport = require('passport');
 const PORT = process.env.PORT || 3000;
@@ -34,6 +35,7 @@ db.once('open', function() {
 const Appointment = require('./model/Appointments');
 
 // //Look for static files
+app.use(favicon(path.join(__dirname, 'public/assets/img', 'favicon.png')));
 // app.use('/static', express.static('./server/static'));
 app.use(express.static('public'));
 // app.use(express.static(__dirname + '/public'));
