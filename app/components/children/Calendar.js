@@ -1,17 +1,81 @@
 import React, { Component } from 'react';
 import dateFns from 'date-fns';
+import axios from 'axios';
 
 import Appointments from './Appointments.js';
+import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react'
+
 
 class Calendar extends Component {
   constructor(props){
     super(props);
     this.state = {
       currentMonth: new Date(),
-      selectedDate: new Date()
+      selectedDate: new Date(),
+      queryList: null
     };
 
     this.onDateClick = this.onDateClick.bind(this);
+  }
+
+  componentDidUpdate(){
+    const { currentMonth, selectedDate } = this.state;
+    const monthStart = dateFns.startOfMonth(currentMonth);
+    const monthEnd = dateFns.endOfMonth(monthStart);
+    const startDate = dateFns.startOfWeek(monthStart);
+    const endDate = dateFns.endOfWeek(monthEnd);
+
+    const dateFormat = 'D';
+    const rows = [];
+
+    let days = [];
+    let day = startDate;
+    let formattedDate = '';
+
+    let datesToSearch = {
+      start: monthStart,
+      end: monthEnd
+    };
+
+    axios.post('/calendar_fill', datesToSearch).then(res =>{
+      const queryList = res.data;
+      queryList.forEach((part, index, array) => {
+        array[index] = part.Date.split('T')[0];
+      });
+      this.setState({
+        queryList
+      });
+    });
+  }
+
+  componentWillMount() {
+    const { currentMonth, selectedDate } = this.state;
+    const monthStart = dateFns.startOfMonth(currentMonth);
+    const monthEnd = dateFns.endOfMonth(monthStart);
+    const startDate = dateFns.startOfWeek(monthStart);
+    const endDate = dateFns.endOfWeek(monthEnd);
+
+    const dateFormat = 'D';
+    const rows = [];
+
+    let days = [];
+    let day = startDate;
+    let formattedDate = '';
+
+    let datesToSearch = {
+      start: monthStart,
+      end: monthEnd
+    };
+
+    axios.post('/calendar_fill', datesToSearch).then(res =>{
+      const queryList = res.data;
+      queryList.forEach((part, index, array) => {
+        array[index] = part.Date.split('T')[0];
+      });
+      this.setState({
+        queryList
+      });
+    });
   }
 
   renderHeader() {
@@ -21,7 +85,7 @@ class Calendar extends Component {
       <div className='header row flex-middle'>
         <div className='col col-start'>
           <div className='icon' onClick={this.prevMonth}>
-            chevron_left
+            <i class="fas fa-chevron-left"></i>
           </div>
         </div>
         <div className='col col-center'>
@@ -29,8 +93,10 @@ class Calendar extends Component {
             {dateFns.format(this.state.currentMonth, dateFormat)}
           </span>
         </div>
-        <div className='col col-end' onClick={this.nextMonth}>
-          <div className='icon'>chevron_right</div>
+        <div className='col col-end'>
+          <div className='icon' onClick={this.nextMonth}>
+            <i class="fas fa-chevron-right"></i>
+          </div>
         </div>
       </div>
     );
@@ -66,10 +132,20 @@ class Calendar extends Component {
     let day = startDate;
     let formattedDate = '';
 
+    let datesToSearch = {
+      start: monthStart,
+      end: monthEnd
+    };
+
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         formattedDate = dateFns.format(day, dateFormat);
+
+        let dayCheck = new Date(day);
+        let dayCheckFormat = dayCheck.toISOString().split('T')[0];
+        let marker = (this.state.queryList.includes(dayCheckFormat) ? 'mark' : '');
         const cloneDay = day;
+
         days.push(
           <div className={`col cell ${
               !dateFns.isSameMonth(day, monthStart)
@@ -81,6 +157,7 @@ class Calendar extends Component {
           >
             <span className='number'>{formattedDate}</span>
             <span className='bg'>{formattedDate}</span>
+            <span className={`${marker}`}></span>
           </div>
         );
         day = dateFns.addDays(day, 1);
@@ -114,6 +191,17 @@ class Calendar extends Component {
   };
 
   render() {
+
+    if (this.state.queryList === null){
+      return (
+        <Segment>
+          <Dimmer active>
+            <Loader />
+          </Dimmer>
+        </Segment>
+      )
+    }
+
     return (
       <div>
         <div className='calendar'>

@@ -47,6 +47,37 @@ module.exports = function(app, Appointment) {
       });
     });
 
+    app.post('/update_appointment', (req, res) => {
+      Appointment.update({
+        Date: new Date(req.body.Date)
+      }, {
+        '$set': {
+          body: req.body.body
+        }
+      }, function(err, App) {
+        if (err){
+          console.log(err);
+        } else {
+          res.json(App);
+        }
+      });
+    });
+
+    app.post('/calendar_fill', (req, res) => {
+      Appointment.find({
+        Date: {
+          '$gte': new Date(req.body.start),
+          '$lte': new Date(req.body.end)
+        }
+      }, function(err, App){
+        if (err){
+          console.log(err);
+        } else {
+          res.json(App);
+        }
+      })
+    });
+
     app.use('*', function(req, res) {
         var dir = __dirname;
         var dirSplit = dir.split("controllers");

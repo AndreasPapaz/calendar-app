@@ -8,9 +8,8 @@ export default class Main extends Component {
       <div className="App">
         <header>
           <div id='logo'></div>
-          <span className='icon'>date_range</span>
-          <span>
-            react<b>Calendar</b>
+          <span className='title-text'>
+          <b>Wicked Calendar App, Made with React by: Andreas Papazafeiropoulos</b>
           </span>
         </header>
         <main>

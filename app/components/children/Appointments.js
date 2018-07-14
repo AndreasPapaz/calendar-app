@@ -4,7 +4,7 @@ import axios from 'axios';
 import dateFns from 'date-fns';
 
 import AppointmentForm from './form/appointmentForm'
-import { Card, Button } from 'semantic-ui-react'
+import { Card, Button, Input } from 'semantic-ui-react'
 
 class Appointments extends Component {
   constructor(props) {
@@ -13,6 +13,7 @@ class Appointments extends Component {
         todayDate: new Date(),
         selectedDate: props.calendarDate,
         formatDate: null,
+        editing: false,
         representDate: null,
         entry: {
           body: ''
@@ -22,6 +23,7 @@ class Appointments extends Component {
       this.submitAppointment = this.submitAppointment.bind(this);
       this.deleteAppointment = this.deleteAppointment.bind(this);
 		  this.changeEntry = this.changeEntry.bind(this);
+      this.updateAppointment = this.updateAppointment.bind(this);
   }
 
   componentWillMount(){
@@ -95,6 +97,28 @@ class Appointments extends Component {
     });
   }
 
+  updateAppointment(e){
+    e.preventDefault();
+
+    if (this.state.editing) {
+      let updateData = {
+        Date: this.state.formatDate,
+        body: this.state.entry.body
+      };
+
+      axios.post('/update_appointment', updateData).then(res => {
+        this.setState({
+          editing: false
+        });
+      })
+    }
+    else {
+      this.setState({
+        editing: true
+      });
+    }
+  }
+
   deleteAppointment(e){
     e.preventDefault();
 
@@ -109,6 +133,24 @@ class Appointments extends Component {
     });
   }
 
+  isEditing() {
+    if (this.state.editing){
+      return(
+        <Input
+          name='body'
+          onChange={this.changeEntry}
+          value={ this.state.entry.body }
+        />
+      )
+    } else {
+      return(
+        <Card.Description onClick={this.updateAppointment}>
+          { this.state.appointmentDay }
+        </Card.Description>
+      )
+    }
+  }
+
   makeOrDelete() {
     let todayDate = new Date(this.state.todayDate);
     let selectedDate = new Date(this.state.selectedDate);
@@ -118,8 +160,9 @@ class Appointments extends Component {
         <Card>
           <Card.Content>
             <Card.Header>Appointment for... { this.state.representDate }</Card.Header>
-            <Card.Description>{ this.state.appointmentDay }</Card.Description>
+            { this.isEditing() }
           </Card.Content>
+          <Button onClick={ this.updateAppointment }>Update</Button>
           <Button negative onClick={ this.deleteAppointment }>Delete</Button>
         </Card>
       )
