@@ -133,7 +133,7 @@ class Appointments extends Component {
         appointmentDay: null
       });
     });
-    
+
     this.props.forceUpdate();
   }
 
@@ -159,6 +159,9 @@ class Appointments extends Component {
     let todayDate = new Date(this.state.todayDate);
     let selectedDate = new Date(this.state.selectedDate);
 
+    let formatToday = todayDate.toJSON().split('T')[0];
+    let formatSelected = selectedDate.toJSON().split('T')[0];
+
     if (this.state.appointmentDay !== null) {
       return(
         <Card>
@@ -171,7 +174,7 @@ class Appointments extends Component {
         </Card>
       )
     }
-    else if (todayDate.toLocaleDateString() <= selectedDate.toLocaleDateString()){
+    else if (formatToday <= formatSelected){
       return(
         <AppointmentForm
           onSubmit={this.submitAppointment}
