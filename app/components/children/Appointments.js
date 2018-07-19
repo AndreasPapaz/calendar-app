@@ -94,9 +94,8 @@ class Appointments extends Component {
       this.setState({
         appointmentDay: res.data.body
       });
+      this.props.forceUpdate();
     });
-
-    this.props.forceUpdate();
   }
 
   updateAppointment(e){
@@ -132,9 +131,8 @@ class Appointments extends Component {
       this.setState({
         appointmentDay: null
       });
+      this.props.forceUpdate();
     });
-
-    this.props.forceUpdate();
   }
 
   isEditing() {

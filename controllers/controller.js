@@ -1,16 +1,4 @@
 module.exports = function(app, Appointment) {
-    app.post('/signup', function(req, res) {
-        var user = new User(req.body);
-
-        user.save(function(err, doc) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.send(doc);
-            }
-        });
-    });
-
     app.post('/appointment', (req, res) => {
       let appointment = new Appointment(req.body);
 
@@ -18,7 +6,7 @@ module.exports = function(app, Appointment) {
         if (err) {
           res.send(err);
         } else {
-          res.send(doc);
+          res.json(doc);
         }
       });
     });
@@ -42,7 +30,7 @@ module.exports = function(app, Appointment) {
         if (err){
           console.log(err);
         } else {
-          res.send(App)
+          res.json(App)
         }
       });
     });
@@ -64,12 +52,7 @@ module.exports = function(app, Appointment) {
     });
 
     app.post('/calendar_fill', (req, res) => {
-      Appointment.find({
-        Date: {
-          '$gte': new Date(req.body.start),
-          '$lte': new Date(req.body.end)
-        }
-      }, function(err, App){
+      Appointment.find({}, function(err, App){
         if (err){
           console.log(err);
         } else {

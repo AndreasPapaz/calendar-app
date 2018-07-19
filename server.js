@@ -20,8 +20,8 @@ const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 
 
-// mongoose.connect("mongodb://localhost/calendar-app");
-mongoose.connect('mongodb://heroku_92lpnzhp:miv094ukmq0pgj3itraqqcoc2o@ds235401.mlab.com:35401/heroku_92lpnzhp')
+mongoose.connect("mongodb://localhost/calendar-app");
+// mongoose.connect('mongodb://heroku_92lpnzhp:miv094ukmq0pgj3itraqqcoc2o@ds235401.mlab.com:35401/heroku_92lpnzhp')
 const db = mongoose.connection;
 
 db.on('error', function(error) {
