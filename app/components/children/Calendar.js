@@ -16,9 +16,40 @@ class Calendar extends Component {
     };
 
     this.onDateClick = this.onDateClick.bind(this);
+    this.forceUpdate = this.forceUpdate.bind(this);
   }
 
-  componentDidUpdate(){
+  componentDidUpdate(prevProps, prevState){
+    // const { currentMonth, selectedDate } = this.state;
+    // const monthStart = dateFns.startOfMonth(currentMonth);
+    // const monthEnd = dateFns.endOfMonth(monthStart);
+    // const startDate = dateFns.startOfWeek(monthStart);
+    // const endDate = dateFns.endOfWeek(monthEnd);
+    //
+    // const dateFormat = 'D';
+    // const rows = [];
+    //
+    // let days = [];
+    // let day = startDate;
+    // let formattedDate = '';
+    //
+    // let datesToSearch = {
+    //   start: monthStart,
+    //   end: monthEnd
+    // };
+    //
+    // axios.post('/calendar_fill', datesToSearch).then(res =>{
+    //   const queryList = res.data;
+    //   queryList.forEach((part, index, array) => {
+    //     array[index] = part.Date.split('T')[0];
+    //   });
+    //   this.setState({
+    //     queryList
+    //   });
+    // });
+  }
+
+  forceUpdate() {
     const { currentMonth, selectedDate } = this.state;
     const monthStart = dateFns.startOfMonth(currentMonth);
     const monthEnd = dateFns.endOfMonth(monthStart);
@@ -209,7 +240,7 @@ class Calendar extends Component {
           {this.renderDays()}
           {this.renderCells()}
         </div>
-        <Appointments calendarDate={this.state.selectedDate} />
+        <Appointments calendarDate={this.state.selectedDate} forceUpdate={this.forceUpdate} />
       </div>
     );
   }

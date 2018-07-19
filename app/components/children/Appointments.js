@@ -95,6 +95,8 @@ class Appointments extends Component {
         appointmentDay: res.data.body
       });
     });
+
+    this.props.forceUpdate();
   }
 
   updateAppointment(e){
@@ -131,6 +133,8 @@ class Appointments extends Component {
         appointmentDay: null
       });
     });
+    
+    this.props.forceUpdate();
   }
 
   isEditing() {
